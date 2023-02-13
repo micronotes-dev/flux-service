@@ -14,8 +14,7 @@ class FooConverter implements FakeRowConverter
         public readonly Reference $reference,
         public readonly string $foo = 'bar',
         public readonly ?array $data = null,
-    )
-    {
+    ) {
     }
 
     public static function fromRows(array $providerRows): iterable
@@ -33,19 +32,21 @@ class FooConverter implements FakeRowConverter
         return $rows;
     }
 
-    #[Pure] public static function fromProvider(Reference $reference, ?array $data): FooConverter
-    {
-        return new static(
-            reference: $reference,
-            foo: 'baz',
-            data: $data,
-        );
-    }
+    #[Pure]
+ public static function fromProvider(Reference $reference, ?array $data): FooConverter
+ {
+     return new static(
+         reference: $reference,
+         foo: 'baz',
+         data: $data,
+     );
+ }
 
-    #[Pure] public function toProvider(): array
-    {
-        return $this->toArray();
-    }
+    #[Pure]
+ public function toProvider(): array
+ {
+     return $this->toArray();
+ }
 
     public function getMorphModelAlias(): string
     {

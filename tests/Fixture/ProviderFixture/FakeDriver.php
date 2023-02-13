@@ -34,7 +34,7 @@ class FakeDriver implements FluxDriver
             throw FluxException::missingMorphedModelConverterForDriver($alias, $this->getProvider());
         }
 
-        if (!is_a($this->getConverters()[$alias], RowConverter::class, allow_string: true)) {
+        if (! is_a($this->getConverters()[$alias], RowConverter::class, allow_string: true)) {
             throw new \LogicException(
                 sprintf(
                     "Converter '%s' must implement '%s' interface.",
