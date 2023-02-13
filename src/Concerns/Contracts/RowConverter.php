@@ -15,6 +15,4 @@ interface RowConverter extends Arrayable
     public function toProvider(): array;
 
     public function toQuery(): ?Builder;
-
-    public static function empty(array $extra = []): array;
 }

@@ -9,12 +9,12 @@ trait InteractsWithProviderSyncs
 {
     public function getInternalReference(): Reference
     {
-        return new Reference(reference: $this->getKey());
+        return new Reference(id: $this->getKey());
     }
 
     public function getExternalReference(): Reference
     {
-        return new Reference(reference: $this->getRouteKey());
+        return new Reference(id: $this->getRouteKey());
     }
 
     public function providerSynchronizations(): MorphMany
