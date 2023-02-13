@@ -4,7 +4,6 @@ namespace Micronotes\Flux\Concerns\Traits;
 
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Micronotes\Flux\DataTransferObjects\Reference;
-use Micronotes\Flux\Models\ProviderSync;
 
 trait InteractsWithProviderSyncs
 {

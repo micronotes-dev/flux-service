@@ -3,9 +3,9 @@
 namespace Micronotes\Flux;
 
 use Micronotes\Flux\Commands\ExportFluxCommand;
+use Micronotes\Flux\Commands\ImportFluxCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Micronotes\Flux\Commands\ImportFluxCommand;
 
 class FluxServiceProvider extends PackageServiceProvider
 {

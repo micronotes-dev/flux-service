@@ -10,7 +10,7 @@ class DriverFactory
     {
         $driverConfig = config('flux.drivers', []);
 
-        if (!is_a($driverConfig[$provider] ?? null, FluxDriver::class, allow_string: true)) {
+        if (! is_a($driverConfig[$provider] ?? null, FluxDriver::class, allow_string: true)) {
             throw new \LogicException("Missing driver implementation for provider '$provider'");
         }
 

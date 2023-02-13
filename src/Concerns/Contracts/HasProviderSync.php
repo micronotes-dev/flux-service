@@ -2,7 +2,6 @@
 
 namespace Micronotes\Flux\Concerns\Contracts;
 
-
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Micronotes\Flux\DataTransferObjects\Reference;
 
