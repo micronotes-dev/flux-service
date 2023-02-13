@@ -27,8 +27,8 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app): void
     {
-        config()->set('database.default', 'testing');
-        config()->set('flux.drivers', [
+        $app['config']->set('database.default', 'testing');
+        $app['config']->set('flux.drivers', [
             'foo-driver' => FakeDriver::class,
         ]);
 
