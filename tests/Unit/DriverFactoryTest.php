@@ -10,10 +10,9 @@ it('cannot create unknown flux driver', function () {
 });
 
 it('can create a flux driver', function () {
-    config([
-        'flux.drivers' => [
+    \Illuminate\Support\Facades\Config::set(
+        'flux.drivers',[
             'fake-driver' => FakeDriver::class,
-        ],
     ]);
 
     $driver = app(\Micronotes\Flux\DriverFactory::class)->make('fake-driver');
