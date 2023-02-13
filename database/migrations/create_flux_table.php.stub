@@ -8,10 +8,14 @@ return new class extends Migration
 {
     public function up()
     {
-        Schema::create('migration_table_name_table', function (Blueprint $table) {
+        Schema::create('flux_table', function (Blueprint $table) {
             $table->id();
 
-            // add fields
+            $table->string('flux_type');
+            $table->morphs('model');
+            $table->string('provider_type');
+            $table->string('provider_id');
+            $table->json('document')->nullable();
 
             $table->timestamps();
         });
