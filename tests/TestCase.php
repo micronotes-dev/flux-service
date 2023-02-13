@@ -4,6 +4,7 @@ namespace Micronotes\Flux\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Micronotes\Flux\FluxServiceProvider;
+use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeDriver;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 class TestCase extends Orchestra
@@ -13,7 +14,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Micronotes\\Flux\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn(string $modelName) => 'Micronotes\\Flux\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
@@ -27,6 +28,9 @@ class TestCase extends Orchestra
     public function getEnvironmentSetUp($app): void
     {
         config()->set('database.default', 'testing');
+        config()->set('flux.drivers', [
+            'foo-driver' => FakeDriver::class,
+        ]);
 
         /*
         $migration = include __DIR__.'/../database/migrations/create_flux_table.php.stub';
