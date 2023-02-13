@@ -10,18 +10,18 @@ use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowConverter;
 
 class FooConverter implements FakeRowConverter
 {
-    public function __construct(
+    final public function __construct(
         public readonly Reference $reference,
         public readonly string $foo = 'bar',
         public readonly ?array $data = null,
     ) {
     }
 
-    public static function fromRows(array $providerRows): iterable
+    #[Pure] public static function fromRows(array $providerRows): iterable
     {
         $rows = [];
         foreach ($providerRows as $row) {
-            $rows[] = static::fromProvider(
+            $rows[] = self::fromProvider(
                 reference: new Reference(
                     id: $row['uuid'],
                 ),
@@ -33,20 +33,20 @@ class FooConverter implements FakeRowConverter
     }
 
     #[Pure]
- public static function fromProvider(Reference $reference, ?array $data): FooConverter
- {
-     return new static(
-         reference: $reference,
-         foo: 'baz',
-         data: $data,
-     );
- }
+    public static function fromProvider(Reference $reference, ?array $data): FooConverter
+    {
+        return new self(
+            reference: $reference,
+            foo: 'baz',
+            data: $data,
+        );
+    }
 
     #[Pure]
- public function toProvider(): array
- {
-     return $this->toArray();
- }
+    public function toProvider(): array
+    {
+        return $this->toArray();
+    }
 
     public function getMorphModelAlias(): string
     {
