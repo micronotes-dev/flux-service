@@ -3,9 +3,13 @@
 namespace Micronotes\Flux;
 
 use Illuminate\Database\Eloquent\Model;
+use Micronotes\Flux\Concerns\Contracts\RowConverter;
 use Micronotes\Flux\Concerns\Contracts\Upsertable;
-use Micronotes\Flux\DataTransferObjects\FailedImportMessage;
+use Micronotes\Flux\DataTransferObjects\FailedFluxMessage;
 use Micronotes\Flux\Enums\FluxStatus;
+use Micronotes\Flux\Events\Exported;
+use Micronotes\Flux\Events\ExportFailed;
+use Micronotes\Flux\Events\Exporting;
 use Micronotes\Flux\Events\Imported;
 use Micronotes\Flux\Events\ImportFailed;
 use Micronotes\Flux\Events\Importing;
@@ -37,7 +41,26 @@ class Flux
 
     public function export(FluxExport $exportCommand): void
     {
-        $exportCommand->status = FluxStatus::success;
+        foreach ($exportCommand->models as $model) {
+            /** @var RowConverter $converterData */
+            $converterData = $exportCommand->driver->getConverterForMorphedModel($model->getMorphClass());
+            $exportCommand->converters[$model->getKey()] = $converterData::fromModel($model);
+        }
+        
+        foreach ($exportCommand->converters as $converter) {
+            event(new Exporting(converter: $converter));
+            try {
+                $exportCommand->driver->getRepository()->updateOrCreate($converter);
+                event(new Exported(converter: $converter));
+                $exportCommand->exported[] = $converter->getReference();
+            } catch (\Exception $exception) {
+                $exportCommand->failed[] = new FailedFluxMessage(
+                    reference: $converter->getReference(),
+                    message: $exception->getMessage(),
+                );
+                event(new ExportFailed($converter));
+            }
+        }
     }
 
     public function persistImport(FluxImport $importCommand): void
@@ -69,7 +92,7 @@ class Flux
 
                 $importCommand->imported[$converter->getReference()->id] = $model;
             } catch (\Exception $exception) {
-                $importCommand->failed[] = new FailedImportMessage(
+                $importCommand->failed[] = new FailedFluxMessage(
                     reference: $converter->getReference(),
                     message: $exception->getMessage(),
                 );

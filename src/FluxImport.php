@@ -5,7 +5,7 @@ namespace Micronotes\Flux;
 use Illuminate\Database\Eloquent\Model;
 use Micronotes\Flux\Concerns\Contracts\FluxDriver;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
-use Micronotes\Flux\DataTransferObjects\FailedImportMessage;
+use Micronotes\Flux\DataTransferObjects\FailedFluxMessage;
 use Micronotes\Flux\Enums\FluxStatus;
 
 class FluxImport
@@ -13,7 +13,7 @@ class FluxImport
     /** @var Model[] */
     public iterable $imported = [];
 
-    /** @var FailedImportMessage[] */
+    /** @var FailedFluxMessage[] */
     public iterable $failed = [];
 
     /** @var RowConverter[] */
