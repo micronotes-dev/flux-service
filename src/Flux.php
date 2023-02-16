@@ -2,6 +2,8 @@
 
 namespace Micronotes\Flux;
 
+use Illuminate\Database\Eloquent\Model;
+use Micronotes\Flux\Concerns\Contracts\Upsertable;
 use Micronotes\Flux\DataTransferObjects\FailedImportMessage;
 use Micronotes\Flux\Enums\FluxStatus;
 use Micronotes\Flux\Events\Imported;
@@ -41,6 +43,13 @@ class Flux
     public function persistImport(FluxImport $importCommand): void
     {
         // todo batch param?
+//        $morphedModelClass = $importCommand->driver->getConverterForMorphedModel($importCommand->modelAlias);
+//        /** @var Model $modelInstance */
+//        $modelInstance = new $morphedModelClass;
+//        $uniqueBy = $modelInstance instanceof Upsertable::class ?
+//            $modelInstance->getUpsertable()->uniqueBy
+//            : null;
+
         foreach ($importCommand->retrievedConverters as $converter) {
             try {
                 $model = null;
