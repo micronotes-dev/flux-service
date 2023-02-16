@@ -11,6 +11,11 @@ class PreventModelEventsObserver
         return false;
     }
 
+    public function saving(Model $model): bool
+    {
+        return false;
+    }
+
     public function updating(Model $model): bool
     {
         return false;

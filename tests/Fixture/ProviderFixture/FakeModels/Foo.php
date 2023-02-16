@@ -8,6 +8,10 @@ class Foo extends Model
 {
     protected $guarded = [];
 
+    protected $casts = [
+        'data' => 'json',
+    ];
+
     protected static function boot(): void
     {
         parent::boot();

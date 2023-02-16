@@ -2,6 +2,8 @@
 
 namespace Micronotes\Flux\Tests\Fixture\ProviderFixture;
 
+use Illuminate\Support\Enumerable;
+use Illuminate\Support\Str;
 use Micronotes\Flux\Concerns\AbstractFluxRepository;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
 use Micronotes\Flux\DataTransferObjects\Reference;
@@ -26,5 +28,17 @@ class FakeRepository extends AbstractFluxRepository
     public function delete(RowConverter $converter): bool
     {
         return true;
+    }
+
+    public function search(?array $filters = []): iterable
+    {
+        return FooConverter::fromRows(
+            collect(range(0, random_int(2, 15)))->map(fn() => [
+                'uuid' => Str::uuid(),
+                'data' => random_int(0, 1) ? [
+                    fake()->word => fake()->randomElement([fake()->word, fake()->sentence, fake()->randomDigit()]),
+                ] : null,
+            ])->toArray()
+        );
     }
 }
