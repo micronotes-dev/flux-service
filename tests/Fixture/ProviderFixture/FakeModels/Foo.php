@@ -2,12 +2,18 @@
 
 namespace Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Foo extends Model
 {
-    protected $guarded = [];
+    use HasUuids, HasFactory;
 
+    protected $guarded = [];
+    
+    protected $primaryKey = 'uuid';
+    
     protected $casts = [
         'data' => 'json',
     ];
@@ -17,5 +23,10 @@ class Foo extends Model
         parent::boot();
 
         static::observe(PreventModelEventsObserver::class);
+    }
+
+    protected static function newFactory(): FooFactory
+    {
+        return new FooFactory();
     }
 }

@@ -3,6 +3,7 @@
 namespace Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use JetBrains\PhpStorm\Pure;
 use Micronotes\Flux\DataTransferObjects\Reference;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
@@ -70,5 +71,14 @@ class FooConverter implements FakeRowConverter
     public function model(): ?string
     {
         return Foo::class;
+    }
+
+    public static function fromModel(Model $model): static
+    {
+        return new static(
+            reference: new Reference(id: $model->getRouteKey()),
+            foo: fake()->word,
+            data: $model->getAttribute('data'),
+        );
     }
 }

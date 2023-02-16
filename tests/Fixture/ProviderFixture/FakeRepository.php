@@ -9,6 +9,7 @@ use Micronotes\Flux\Concerns\Contracts\RowConverter;
 use Micronotes\Flux\DataTransferObjects\Reference;
 use Micronotes\Flux\Events\ProviderSyncCreated;
 use Micronotes\Flux\Models\ProviderSync;
+use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters\FooConverter;
 
 class FakeRepository extends AbstractFluxRepository
@@ -33,12 +34,7 @@ class FakeRepository extends AbstractFluxRepository
     public function search(?array $filters = []): iterable
     {
         return FooConverter::fromRows(
-            collect(range(0, random_int(2, 15)))->map(fn() => [
-                'uuid' => Str::uuid(),
-                'data' => random_int(0, 1) ? [
-                    fake()->word => fake()->randomElement([fake()->word, fake()->sentence, fake()->randomDigit()]),
-                ] : null,
-            ])->toArray()
+            Foo::factory(random_int(1, 15))->make()->toArray()
         );
     }
 }

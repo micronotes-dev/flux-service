@@ -7,15 +7,38 @@ use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters\FooConverter;
 
 it('can export data from driver', function() {
-    $models = collect(new Foo());
+    $models = Foo::factory(random_int(5, 15))->make();
+    
     $fluxExport = new \Micronotes\Flux\FluxExport(
         $models,
         \Micronotes\Flux\DriverFactory::make('foo-driver'),
     );
 
+    Event::fake([
+        \Micronotes\Flux\Events\Exporting::class,
+        \Micronotes\Flux\Events\Exported::class,
+        \Micronotes\Flux\Events\ExportFailed::class,
+    ]);
+
     Flux::export($fluxExport);
-    
-    expect($fluxExport)->status->toEqual(\Micronotes\Flux\Enums\FluxStatus::success);
+
+    $this->assertCount(0, $fluxExport->failed);
+    $this->assertNotSame(0, $count = count($fluxExport->exported));
+    $this->assertSame(count($fluxExport->converters), $count);
+
+    Event::assertDispatchedTimes(
+        \Micronotes\Flux\Events\Exporting::class,
+        $count
+    );
+    Event::assertDispatchedTimes(
+        \Micronotes\Flux\Events\Exported::class,
+        $count
+    );
+    Event::assertNotDispatched(\Micronotes\Flux\Events\ExportFailed::class);
+
+    expect($fluxExport)
+        ->getStatus()->toEqual(\Micronotes\Flux\Enums\FluxStatus::success)
+        ->and($fluxExport)->exported->toHaveCount($count);
 });
 
 it('can import data from driver', function() {
@@ -28,8 +51,6 @@ it('can import data from driver', function() {
         dryRun: false,
     );
 
-    $fluxImport->retrievedConverters = collect($driver?->getRepository()->search())->keyBy('reference.id');
-    
     Event::fake([
         \Micronotes\Flux\Events\Importing::class,
         \Micronotes\Flux\Events\Imported::class,
@@ -37,10 +58,12 @@ it('can import data from driver', function() {
     ]);
 
     \Micronotes\Flux\Facades\Flux::import($fluxImport);
+
+    $this->assertNotSame(0, $count = count($fluxImport->retrievedConverters));
     
     Event::assertDispatchedTimes(
         \Micronotes\Flux\Events\Imported::class,
-        $count = count($fluxImport->retrievedConverters)
+        $count
     );
     Event::assertDispatchedTimes(
         \Micronotes\Flux\Events\Importing::class,
