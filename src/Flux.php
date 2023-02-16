@@ -16,7 +16,11 @@ class Flux
 {
     public function import(FluxImport $importCommand): void
     {
-        $importCommand->retrievedConverters = $importCommand->driver->getRepository()->search($importCommand->filters);
+        try {
+            $importCommand->retrievedConverters = $importCommand->driver->getRepository()->search($importCommand->filters);
+        } catch (\Exception $exception) {
+            $importCommand->status = FluxStatus::failed;
+        }
 
         if (!$importCommand->dryRun) {
             $this->persistImport($importCommand);
@@ -29,20 +33,14 @@ class Flux
         }
     }
 
-    public function export(FluxExport $exportCommand)
+    public function export(FluxExport $exportCommand): void
     {
+        $exportCommand->status = FluxStatus::success;
     }
 
-    public function run()
+    public function persistImport(FluxImport $importCommand): void
     {
-    }
-
-    public function dryRun()
-    {
-    }
-
-    private function persistImport(FluxImport $importCommand): void
-    {
+        // todo batch param?
         foreach ($importCommand->retrievedConverters as $converter) {
             try {
                 $model = null;
@@ -54,13 +52,13 @@ class Flux
                 if ($modelClass === null) {
                     continue;
                 }
-
-                $model = (new $modelClass())($converter->toArray());
+                
+                $model = new $modelClass($converter->toArray());
                 $model->save();
 
                 event(new Imported(model: $model, converter: $converter));
 
-                $importCommand->imported[] = $converter->getReference();
+                $importCommand->imported[$converter->getReference()->id] = $model;
             } catch (\Exception $exception) {
                 $importCommand->failed[] = new FailedImportMessage(
                     reference: $converter->getReference(),

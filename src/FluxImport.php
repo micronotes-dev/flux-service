@@ -2,15 +2,18 @@
 
 namespace Micronotes\Flux;
 
-use Illuminate\Support\Enumerable;
+use Illuminate\Database\Eloquent\Model;
 use Micronotes\Flux\Concerns\Contracts\FluxDriver;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
+use Micronotes\Flux\DataTransferObjects\FailedImportMessage;
 use Micronotes\Flux\Enums\FluxStatus;
 
 class FluxImport
 {
-    public iterable|Enumerable $imported = [];
+    /** @var Model[] */
+    public iterable $imported = [];
 
+    /** @var FailedImportMessage[] */
     public iterable $failed = [];
 
     /** @var RowConverter[] */
@@ -24,7 +27,6 @@ class FluxImport
         // todo define authorized map string| filters for driver|converters
         public readonly ?array $filters = null,
         public readonly bool $dryRun = false,
-    )
-    {
+    ) {
     }
 }
