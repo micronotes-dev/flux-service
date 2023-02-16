@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Facade;
  */
 class Flux extends Facade
 {
-    protected static function getFacadeAccessor()
+    protected static function getFacadeAccessor(): string
     {
-        return 'flux';
+        return \Micronotes\Flux\Flux::class;
     }
 }

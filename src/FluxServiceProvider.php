@@ -25,6 +25,6 @@ class FluxServiceProvider extends PackageServiceProvider
                 ExportFluxCommand::class,
             ]);
 
-        $this->app->bind('flux', Flux::class);
+        $this->app->bind(\Micronotes\Flux\Facades\Flux::class, Flux::class);
     }
 }

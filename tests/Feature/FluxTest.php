@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Event;
 use Micronotes\Flux\DataTransferObjects\Reference;
+use Micronotes\Flux\Facades\Flux;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters\FooConverter;
 
@@ -12,7 +13,7 @@ it('can export data from driver', function() {
         \Micronotes\Flux\DriverFactory::make('foo-driver'),
     );
 
-    app('flux')->export($fluxExport);
+    Flux::export($fluxExport);
     
     expect($fluxExport)->status->toEqual(\Micronotes\Flux\Enums\FluxStatus::success);
 });
@@ -35,7 +36,7 @@ it('can import data from driver', function() {
         \Micronotes\Flux\Events\ImportFailed::class,
     ]);
 
-    app('flux')->import($fluxImport);
+    \Micronotes\Flux\Facades\Flux::import($fluxImport);
     
     Event::assertDispatchedTimes(
         \Micronotes\Flux\Events\Imported::class,
