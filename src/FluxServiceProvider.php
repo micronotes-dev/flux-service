@@ -23,7 +23,7 @@ class FluxServiceProvider extends PackageServiceProvider
             ->hasCommands([
                 ImportFluxCommand::class,
                 ExportFluxCommand::class,
-            ]);
+            ])->runsMigrations();
 
         $this->app->bind(\Micronotes\Flux\Facades\Flux::class, Flux::class);
     }
