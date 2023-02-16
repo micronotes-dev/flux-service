@@ -24,7 +24,7 @@ class FluxExport
      * @param  Collection|Model[]  $models
      * @param  FluxDriver  $driver
      */
-    #[Pure] public function __construct(
+     public function __construct(
         public readonly array|Collection $models,
         public readonly FluxDriver $driver,
     )

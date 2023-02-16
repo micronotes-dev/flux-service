@@ -3,11 +3,13 @@
 namespace Micronotes\Flux\Facades;
 
 use Illuminate\Support\Facades\Facade;
+use Micronotes\Flux\FluxExport;
+use Micronotes\Flux\FluxImport;
 
 /**
- * @method static void export
- * @method static void import
- * @method static void persisImport
+ * @method static void export(FluxExport $fluxExport)
+ * @method static void import(FluxImport $fluxImport)
+ * @method static void persisImport(FluxImport $fluxImport)
  *
  * @see \Micronotes\Flux\Flux
  */

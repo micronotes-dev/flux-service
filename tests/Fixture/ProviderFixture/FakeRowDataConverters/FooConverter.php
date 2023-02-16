@@ -18,7 +18,7 @@ class FooConverter implements FakeRowConverter
     ) {
     }
 
-    #[Pure] public static function fromRows(array $providerRows): iterable
+     public static function fromRows(array $providerRows): iterable
     {
         $rows = [];
         foreach ($providerRows as $row) {
@@ -33,7 +33,7 @@ class FooConverter implements FakeRowConverter
         return $rows;
     }
 
-    #[Pure]
+    
     public static function fromProvider(Reference $reference, ?array $data): FooConverter
     {
         return new self(
@@ -43,7 +43,7 @@ class FooConverter implements FakeRowConverter
         );
     }
 
-    #[Pure]
+    
     public function toProvider(): array
     {
         return $this->toArray();

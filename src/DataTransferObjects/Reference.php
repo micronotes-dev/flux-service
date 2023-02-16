@@ -3,7 +3,6 @@
 namespace Micronotes\Flux\DataTransferObjects;
 
 use Illuminate\Support\Str;
-use JetBrains\PhpStorm\Pure;
 
 class Reference
 {
@@ -12,16 +11,16 @@ class Reference
     ) {
     }
 
-    #[Pure] public static function empty(): static
+     public static function empty(): self
     {
-        return new static(
+        return new self(
             id: null,
         );
     }
 
-    public static function generate(): static
+    public static function generate(): self
     {
-        return new static(
+        return new self(
             id: Str::uuid(),
         );
     }
