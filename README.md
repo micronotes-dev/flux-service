@@ -1,3 +1,8 @@
+<p align="center">
+	<img src="flux-service.png" width="1028">
+</p>
+
+
 # This is my package flux
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/flux/flux.svg?style=flat-square)](https://packagist.org/packages/flux/flux)
