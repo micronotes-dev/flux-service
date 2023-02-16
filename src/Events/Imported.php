@@ -3,16 +3,18 @@
 namespace Micronotes\Flux\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Micronotes\Flux\Models\ProviderSync;
+use Micronotes\Flux\Concerns\Contracts\RowConverter;
 
-class ProviderSyncCreated
+class Imported
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public function __construct(
-        public readonly ProviderSync $providerSync,
+        public readonly Model $model,
+        public readonly ?RowConverter $converter = null,
     )
     {
     }

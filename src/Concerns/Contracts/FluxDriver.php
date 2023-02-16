@@ -16,4 +16,6 @@ interface FluxDriver
     public function getConverters(): array;
 
     public function getConverterForMorphedModel(string $alias): string;
+
+    public function getModelForConverter(string $converter): ?string;
 }

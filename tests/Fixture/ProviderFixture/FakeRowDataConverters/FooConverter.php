@@ -48,16 +48,6 @@ class FooConverter implements FakeRowConverter
         return $this->toArray();
     }
 
-    public function getMorphModelAlias(): string
-    {
-        return 'foo';
-    }
-
-    public function hasReference(): bool
-    {
-        return true;
-    }
-
     public function getReference(): Reference
     {
         return $this->reference;
@@ -75,5 +65,10 @@ class FooConverter implements FakeRowConverter
             'data' => $this->data,
             'foo' => $this->foo,
         ];
+    }
+
+    public function model(): ?string
+    {
+        return Foo::class;
     }
 }

@@ -46,4 +46,11 @@ class FakeDriver implements FluxDriver
 
         return $this->getConverters()[$alias];
     }
+
+    public function getModelForConverter(string $converter): ?string
+    {
+        $reversedConverters = array_flip($this->getConverters());
+
+        return $reversedConverters[$converter] ?? null;
+    }
 }

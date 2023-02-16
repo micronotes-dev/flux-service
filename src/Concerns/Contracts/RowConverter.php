@@ -15,4 +15,8 @@ interface RowConverter extends Arrayable
     public function toProvider(): array;
 
     public function toQuery(): ?Builder;
+
+    public function model(): ?string;
+
+    public function getReference(): Reference;
 }

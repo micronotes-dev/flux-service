@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Micronotes\Flux\Enums\FluxType;
 use Micronotes\Flux\Events\ProviderSyncCreated;
+use Micronotes\Flux\Events\ProviderSyncCreating;
 
 class ProviderSync extends Model
 {
@@ -24,6 +25,7 @@ class ProviderSync extends Model
     ];
 
     protected $dispatchesEvents = [
+        'creating' => ProviderSyncCreating::class,
         'created' => ProviderSyncCreated::class,
     ];
 

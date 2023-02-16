@@ -5,14 +5,14 @@ namespace Micronotes\Flux\Events;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Micronotes\Flux\Models\ProviderSync;
+use Micronotes\Flux\Concerns\Contracts\RowConverter;
 
-class ProviderSyncCreated
+class Importing
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public function __construct(
-        public readonly ProviderSync $providerSync,
+        public readonly RowConverter $converter,
     )
     {
     }

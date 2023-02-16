@@ -7,7 +7,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Micronotes\Flux\Models\ProviderSync;
 
-class ProviderSyncCreated
+class ProviderSyncCreating
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
