@@ -1,6 +1,6 @@
 {
-    "name": "flux/flux",
-    "description": "This is my package flux",
+    "name": "micronotes-dev/flux-service",
+    "description": "Flux import/export for Laravel",
     "keywords": [
         "Flux",
         "laravel",
