@@ -12,13 +12,16 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [ubuntu-latest]
         php: [8.2, 8.1]
-        laravel: [9.*]
-        stability: [prefer-lowest, prefer-stable]
+        laravel: [10.*, 9.*]
+        stability: [prefer-stable]
         include:
           - laravel: 9.*
             testbench: 7.*
+            carbon: ^2.63
+          - laravel: 10.*
+            testbench: 8.*
             carbon: ^2.63
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
@@ -39,6 +42,12 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/php.json"
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
+      -   name: Cache dependencies
+          uses: actions/cache@v1
+          with:
+            path: ~/.composer/cache/files
+            key: dependencies-${{ matrix.stability }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
@@ -46,6 +55,9 @@ jobs:
 
       - name: List Installed Dependencies
         run: composer show -D
+
+      - name: Dump Autoload
+        run: composer dump-autoload
 
       - name: Execute tests
         run: vendor/bin/pest

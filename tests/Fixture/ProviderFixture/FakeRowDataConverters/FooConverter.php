@@ -1,0 +1,84 @@
+<?php
+
+namespace Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters;
+
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use JetBrains\PhpStorm\Pure;
+use Micronotes\Flux\DataTransferObjects\Reference;
+use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
+use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowConverter;
+
+class FooConverter implements FakeRowConverter
+{
+    final public function __construct(
+        public readonly Reference $reference,
+        public readonly string $foo = 'bar',
+        public readonly ?array $data = null,
+    ) {
+    }
+
+     public static function fromRows(array $providerRows): iterable
+    {
+        $rows = [];
+        foreach ($providerRows as $row) {
+            $rows[] = self::fromProvider(
+                reference: new Reference(
+                    id: $row['uuid'],
+                ),
+                data: (array) $row,
+            );
+        }
+
+        return $rows;
+    }
+
+    
+    public static function fromProvider(Reference $reference, ?array $data): FooConverter
+    {
+        return new self(
+            reference: $reference,
+            foo: 'baz',
+            data: $data,
+        );
+    }
+
+    
+    public function toProvider(): array
+    {
+        return $this->toArray();
+    }
+
+    public function getReference(): Reference
+    {
+        return $this->reference;
+    }
+
+    public function toQuery(): ?Builder
+    {
+        return Foo::query()->where('uuid', $this->reference->id);
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'reference' => $this->reference->id,
+            'data' => $this->data,
+            'foo' => $this->foo,
+        ];
+    }
+
+    public function model(): ?string
+    {
+        return Foo::class;
+    }
+
+    public static function fromModel(Model $model): static
+    {
+        return new static(
+            reference: new Reference(id: $model->getRouteKey()),
+            foo: fake()->word,
+            data: $model->getAttribute('data'),
+        );
+    }
+}
