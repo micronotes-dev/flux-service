@@ -4,7 +4,6 @@ namespace Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use JetBrains\PhpStorm\Pure;
 use Micronotes\Flux\DataTransferObjects\Reference;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowConverter;
@@ -19,21 +18,20 @@ class FooConverter implements FakeRowConverter
     }
 
      public static function fromRows(array $providerRows): iterable
-    {
-        $rows = [];
-        foreach ($providerRows as $row) {
-            $rows[] = self::fromProvider(
-                reference: new Reference(
-                    id: $row['uuid'],
-                ),
-                data: (array) $row,
-            );
-        }
+     {
+         $rows = [];
+         foreach ($providerRows as $row) {
+             $rows[] = self::fromProvider(
+                 reference: new Reference(
+                     id: $row['uuid'],
+                 ),
+                 data: (array) $row,
+             );
+         }
 
-        return $rows;
-    }
+         return $rows;
+     }
 
-    
     public static function fromProvider(Reference $reference, ?array $data): FooConverter
     {
         return new self(
@@ -43,7 +41,6 @@ class FooConverter implements FakeRowConverter
         );
     }
 
-    
     public function toProvider(): array
     {
         return $this->toArray();

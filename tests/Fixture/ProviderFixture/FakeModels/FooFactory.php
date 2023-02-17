@@ -9,7 +9,7 @@ class FooFactory extends Factory
     protected $model = Foo::class;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function definition(): array
     {

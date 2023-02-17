@@ -14,7 +14,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn(string $modelName) => 'Micronotes\\Flux\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Micronotes\\Flux\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

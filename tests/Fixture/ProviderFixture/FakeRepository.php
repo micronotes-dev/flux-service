@@ -2,8 +2,6 @@
 
 namespace Micronotes\Flux\Tests\Fixture\ProviderFixture;
 
-use Illuminate\Support\Enumerable;
-use Illuminate\Support\Str;
 use Micronotes\Flux\Concerns\AbstractFluxRepository;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
 use Micronotes\Flux\DataTransferObjects\Reference;

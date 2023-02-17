@@ -13,7 +13,6 @@ class ProviderSyncCreated
 
     public function __construct(
         public readonly ProviderSync $providerSync,
-    )
-    {
+    ) {
     }
 }

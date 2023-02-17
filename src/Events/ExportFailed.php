@@ -3,7 +3,6 @@
 namespace Micronotes\Flux\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
@@ -14,7 +13,6 @@ class ExportFailed
 
     public function __construct(
         public readonly RowConverter $converter,
-    )
-    {
+    ) {
     }
 }

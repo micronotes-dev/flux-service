@@ -12,11 +12,11 @@ class Reference
     }
 
      public static function empty(): self
-    {
-        return new self(
-            id: null,
-        );
-    }
+     {
+         return new self(
+             id: null,
+         );
+     }
 
     public static function generate(): self
     {

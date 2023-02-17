@@ -1,14 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Event;
-use Micronotes\Flux\DataTransferObjects\Reference;
 use Micronotes\Flux\Facades\Flux;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
-use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters\FooConverter;
 
-it('can export data from driver', function() {
+it('can export data from driver', function () {
     $models = Foo::factory(random_int(5, 15))->make();
-    
+
     $fluxExport = new \Micronotes\Flux\FluxExport(
         $models,
         \Micronotes\Flux\DriverFactory::make('foo-driver'),
@@ -41,7 +39,7 @@ it('can export data from driver', function() {
         ->and($fluxExport)->exported->toHaveCount($count);
 });
 
-it('can import data from driver', function() {
+it('can import data from driver', function () {
     $driver = \Micronotes\Flux\DriverFactory::make('foo-driver');
 
     $fluxImport = new \Micronotes\Flux\FluxImport(
@@ -60,7 +58,7 @@ it('can import data from driver', function() {
     \Micronotes\Flux\Facades\Flux::import($fluxImport);
 
     $this->assertNotSame(0, $count = count($fluxImport->retrievedConverters));
-    
+
     Event::assertDispatchedTimes(
         \Micronotes\Flux\Events\Imported::class,
         $count

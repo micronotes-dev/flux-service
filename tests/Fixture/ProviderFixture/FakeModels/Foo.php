@@ -11,9 +11,9 @@ class Foo extends Model
     use HasUuids, HasFactory;
 
     protected $guarded = [];
-    
+
     protected $primaryKey = 'uuid';
-    
+
     protected $casts = [
         'data' => 'json',
     ];

@@ -13,7 +13,6 @@ class ImportFailed
 
     public function __construct(
         public readonly RowConverter $converter,
-    )
-    {
+    ) {
     }
 }

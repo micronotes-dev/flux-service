@@ -13,7 +13,6 @@ use Micronotes\Flux\Events\Exporting;
 use Micronotes\Flux\Events\Imported;
 use Micronotes\Flux\Events\ImportFailed;
 use Micronotes\Flux\Events\Importing;
-use function Pest\Laravel\delete;
 
 /**
  * @internal
@@ -28,11 +27,11 @@ class Flux
             $importCommand->status = FluxStatus::failed;
         }
 
-        if (!$importCommand->dryRun) {
+        if (! $importCommand->dryRun) {
             $this->persistImport($importCommand);
 
             match (true) {
-                !empty($importCommand->failed) && !empty($importCommand->imported) => $importCommand->status = FluxStatus::partial,
+                ! empty($importCommand->failed) && ! empty($importCommand->imported) => $importCommand->status = FluxStatus::partial,
                 empty($importCommand->imported) => $importCommand->status = FluxStatus::failed,
                 default => $importCommand->status = FluxStatus::success,
             };
@@ -46,7 +45,7 @@ class Flux
             $converterData = $exportCommand->driver->getConverterForMorphedModel($model->getMorphClass());
             $exportCommand->converters[$model->getKey()] = $converterData::fromModel($model);
         }
-        
+
         foreach ($exportCommand->converters as $converter) {
             event(new Exporting(converter: $converter));
             try {
@@ -84,7 +83,7 @@ class Flux
                 if ($modelClass === null) {
                     continue;
                 }
-                
+
                 $model = new $modelClass($converter->toArray());
                 $model->save();
 

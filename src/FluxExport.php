@@ -3,10 +3,8 @@
 namespace Micronotes\Flux;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Enumerable;
-use JetBrains\PhpStorm\Pure;
 use Micronotes\Flux\Concerns\Contracts\FluxDriver;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
 use Micronotes\Flux\Enums\FluxStatus;
@@ -22,13 +20,11 @@ class FluxExport
 
     /**
      * @param  Collection|Model[]  $models
-     * @param  FluxDriver  $driver
      */
-     public function __construct(
+    public function __construct(
         public readonly array|Collection $models,
         public readonly FluxDriver $driver,
-    )
-    {
+    ) {
     }
 
     public function getStatus(): FluxStatus
@@ -37,11 +33,11 @@ class FluxExport
             return FluxStatus::waiting;
         }
 
-        if (empty($this->failed) && !empty($this->exported)) {
+        if (empty($this->failed) && ! empty($this->exported)) {
             return FluxStatus::success;
         }
 
-        if (!empty($this->failed) && !empty($this->exported)) {
+        if (! empty($this->failed) && ! empty($this->exported)) {
             return FluxStatus::partial;
         }
 

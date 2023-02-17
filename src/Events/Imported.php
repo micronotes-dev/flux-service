@@ -15,7 +15,6 @@ class Imported
     public function __construct(
         public readonly Model $model,
         public readonly ?RowConverter $converter = null,
-    )
-    {
+    ) {
     }
 }
