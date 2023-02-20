@@ -56,4 +56,9 @@ class FakeDriver implements FluxDriver
 
         return $reversedConverters[$converter] ?? null;
     }
+
+    public static function name(): string
+    {
+        return 'Fake Driver';
+    }
 }
