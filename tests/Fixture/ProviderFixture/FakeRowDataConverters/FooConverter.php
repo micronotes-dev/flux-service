@@ -12,6 +12,7 @@ class FooConverter implements FakeRowConverter
 {
     final public function __construct(
         public readonly Reference $reference,
+        public readonly Reference $fake_reference,
         public readonly string $foo = 'bar',
         public readonly ?array $data = null,
     ) {
@@ -36,6 +37,7 @@ class FooConverter implements FakeRowConverter
     {
         return new self(
             reference: $reference,
+            fake_reference: Reference::generate(),
             foo: 'baz',
             data: $data,
         );
@@ -74,8 +76,14 @@ class FooConverter implements FakeRowConverter
     {
         return new static(
             reference: new Reference(id: $model->getRouteKey()),
+            fake_reference: Reference::empty(),
             foo: fake()->word,
             data: $model->getAttribute('data'),
         );
+    }
+
+    public function getProviderReference(): Reference
+    {
+        return $this->fake_reference;
     }
 }
