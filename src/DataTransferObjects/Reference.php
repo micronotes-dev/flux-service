@@ -11,6 +11,11 @@ class Reference
     ) {
     }
 
+    public function id(): null|int|string
+    {
+        return $this->id;
+    }
+
      public static function empty(): self
      {
          return new self(
