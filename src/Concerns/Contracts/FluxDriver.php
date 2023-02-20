@@ -6,7 +6,7 @@ use Micronotes\Flux\Concerns\AbstractFluxRepository;
 
 interface FluxDriver
 {
-    public function getRepository(): AbstractFluxRepository;
+    public function getRepository(?RowConverter $converter = null): AbstractFluxRepository;
 
     public function getProvider(): string;
 
