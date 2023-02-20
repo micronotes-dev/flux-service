@@ -43,7 +43,7 @@ jobs:
           echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       -   name: Cache dependencies
-          uses: actions/cache@v1
+          uses: actions/cache@v3
           with:
             path: ~/.composer/cache/files
             key: dependencies-${{ matrix.stability }}-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
