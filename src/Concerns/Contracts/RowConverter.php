@@ -22,4 +22,6 @@ interface RowConverter extends Arrayable
     public function getReference(): Reference;
 
     public static function fromModel(Model $model): static;
+
+    public function getProviderReference(): Reference;
 }
