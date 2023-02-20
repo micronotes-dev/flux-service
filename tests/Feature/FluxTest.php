@@ -4,7 +4,8 @@ use Illuminate\Support\Facades\Event;
 use Micronotes\Flux\Facades\Flux;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
 
-it('can export data from driver', function () {
+it('can export data from driver', function (bool $batch) {
+    dump($batch);
     $models = Foo::factory(random_int(5, 15))->make();
 
     $fluxExport = new \Micronotes\Flux\FluxExport(
@@ -13,31 +14,38 @@ it('can export data from driver', function () {
     );
 
     Event::fake([
+        \Micronotes\Flux\Events\StartBatching::class,
+        \Micronotes\Flux\Events\Batched::class,
         \Micronotes\Flux\Events\Exporting::class,
         \Micronotes\Flux\Events\Exported::class,
         \Micronotes\Flux\Events\ExportFailed::class,
     ]);
 
-    Flux::export($fluxExport);
+    Flux::export($fluxExport, withBatch: $batch);
 
     $this->assertCount(0, $fluxExport->failed);
     $this->assertNotSame(0, $count = count($fluxExport->exported));
     $this->assertSame(count($fluxExport->converters), $count);
 
-    Event::assertDispatchedTimes(
-        \Micronotes\Flux\Events\Exporting::class,
-        $count
-    );
-    Event::assertDispatchedTimes(
-        \Micronotes\Flux\Events\Exported::class,
-        $count
-    );
+    if (!$batch) {
+        Event::assertDispatchedTimes(
+            \Micronotes\Flux\Events\Exporting::class,
+            $count
+        );
+        Event::assertDispatchedTimes(
+            \Micronotes\Flux\Events\Exported::class,
+            $count
+        );
+    }
     Event::assertNotDispatched(\Micronotes\Flux\Events\ExportFailed::class);
 
     expect($fluxExport)
         ->getStatus()->toEqual(\Micronotes\Flux\Enums\FluxStatus::success)
         ->and($fluxExport)->exported->toHaveCount($count);
-});
+})->with([
+    'batch:true' => ['batch' => true,],
+    'batch:false' => ['batch' => false,],
+]);
 
 it('can import data from driver', function () {
     $driver = \Micronotes\Flux\DriverFactory::make('foo-driver');

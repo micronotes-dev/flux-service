@@ -2,6 +2,7 @@
 
 namespace Micronotes\Flux\Tests\Fixture\ProviderFixture;
 
+use Illuminate\Support\Arr;
 use Micronotes\Flux\Concerns\AbstractFluxRepository;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
 use Micronotes\Flux\DataTransferObjects\Reference;
@@ -12,11 +13,17 @@ use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters\FooConve
 
 class FakeRepository extends AbstractFluxRepository
 {
-    public function updateOrCreate(RowConverter $converter): RowConverter
+    public function updateOrCreate(iterable $converters): array
     {
-        event(new ProviderSyncCreated(new ProviderSync));
+        $created = [];
+        /** @var RowConverter $converter */
+        foreach ($converters as $converter) {
+            event(new ProviderSyncCreated(new ProviderSync));
+            $reference = Reference::generate();
+            $created[$reference->id()] = $converter->toArray();
+        }
 
-        return FooConverter::fromProvider(Reference::empty(), []);
+        return $created;
     }
 
     public function get(Reference $reference): RowConverter

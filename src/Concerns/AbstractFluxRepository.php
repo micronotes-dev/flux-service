@@ -9,7 +9,7 @@ abstract class AbstractFluxRepository
 {
     abstract public function search(?array $filters = []): iterable;
 
-    abstract public function updateOrCreate(RowConverter $converter): RowConverter;
+    abstract public function updateOrCreate(iterable $converters): array;
 
     abstract public function get(Reference $reference): RowConverter;
 
