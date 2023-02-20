@@ -4,7 +4,7 @@ dataset('foos', [
     [
         'reference' => \Illuminate\Support\Str::uuid()->toString(),
         'data' => [
-            fake()->randomKey => fake()->word,
+            fake()->word => fake()->word,
         ],
     ],
     [
