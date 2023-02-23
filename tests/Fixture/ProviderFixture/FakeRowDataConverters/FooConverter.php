@@ -33,7 +33,7 @@ class FooConverter implements FakeRowConverter
          return $rows;
      }
 
-    public static function fromProvider(Reference $reference, ?array $data): FooConverter
+    public static function fromProvider(Reference $reference, ?array $data): static
     {
         return new self(
             reference: $reference,

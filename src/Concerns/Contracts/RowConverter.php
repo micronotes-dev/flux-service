@@ -11,7 +11,7 @@ interface RowConverter extends Arrayable
 {
     public static function fromRows(array $providerRows): iterable;
 
-    public static function fromProvider(Reference $reference, array $data): self;
+    public static function fromProvider(Reference $reference, array $data): static;
 
     public function toProvider(): array;
 
