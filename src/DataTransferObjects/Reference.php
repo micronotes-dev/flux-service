@@ -3,8 +3,10 @@
 namespace Micronotes\Flux\DataTransferObjects;
 
 use Illuminate\Support\Str;
+use JetBrains\PhpStorm\Internal\TentativeType;
+use JsonSerializable;
 
-class Reference
+class Reference implements JsonSerializable
 {
     public function __construct(
         public readonly null|int|string $id,
@@ -28,5 +30,10 @@ class Reference
         return new self(
             id: Str::uuid(),
         );
+    }
+
+    public function jsonSerialize(): string|int|null
+    {
+        return $this->id();
     }
 }
