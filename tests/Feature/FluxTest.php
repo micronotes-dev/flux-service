@@ -5,7 +5,6 @@ use Micronotes\Flux\Facades\Flux;
 use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeModels\Foo;
 
 it('can export data from driver', function (bool $batch) {
-    dump($batch);
     $models = Foo::factory(random_int(5, 15))->make();
 
     $fluxExport = new \Micronotes\Flux\FluxExport(

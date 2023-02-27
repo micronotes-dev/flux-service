@@ -26,9 +26,9 @@ class FakeRepository extends AbstractFluxRepository
         return $created;
     }
 
-    public function get(Reference $reference): RowConverter
+    public function get(Reference $reference): iterable
     {
-        return FooConverter::fromProvider(Reference::generate(), []);
+        return [];
     }
 
     public function delete(RowConverter $converter): bool

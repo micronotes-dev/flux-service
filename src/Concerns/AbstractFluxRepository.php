@@ -11,7 +11,7 @@ abstract class AbstractFluxRepository
 
     abstract public function updateOrCreate(iterable $converters): array;
 
-    abstract public function get(Reference $reference): RowConverter;
+    abstract public function get(Reference $reference): iterable;
 
     abstract public function delete(RowConverter $converter): bool;
 }
