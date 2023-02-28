@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 use JetBrains\PhpStorm\Internal\TentativeType;
 use JsonSerializable;
 
-class Reference implements JsonSerializable
+class Reference implements JsonSerializable, \Stringable
 {
     public function __construct(
         public readonly null|int|string $id,
@@ -34,6 +34,11 @@ class Reference implements JsonSerializable
 
     public function jsonSerialize(): string|int|null
     {
-        return $this->id();
+        return (string) $this;
+    }
+
+    public function __toString()
+    {
+        return (string) $this->id;
     }
 }
