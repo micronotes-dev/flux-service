@@ -7,17 +7,26 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     public function up()
-    {
-        Schema::create('provider_syncs', function (Blueprint $table) {
-            $table->id();
-
-            $table->string('flux_type');
-            $table->morphs('model');
-            $table->string('provider_type');
-            $table->string('provider_id');
-            $table->json('document')->nullable();
-
-            $table->timestamps();
-        });
-    }
+        {
+            Schema::create('provider_syncs', function (Blueprint $table) {
+                $table->id();
+    
+                $table->string('flux_type');
+                $table->string('model_type');
+                $table->string('model_id');
+                $table->string('provider_type');
+                $table->string('provider_id');
+                $table->json('document')->nullable();
+    
+                $table->index(['model_type', 'model_id']);
+                $table->index(['provider_type', 'provider_id']);
+    
+                $table->timestamps();
+            });
+        }
+    
+        public function down()
+        {
+            Schema::dropIfExists('provider_syncs');
+        }
 };
