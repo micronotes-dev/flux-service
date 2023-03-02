@@ -82,3 +82,42 @@ it('can import data from driver', function () {
         ->status->toEqual(\Micronotes\Flux\Enums\FluxStatus::success)
         ->and($fluxImport)->imported->toHaveCount($count);
 });
+
+it('can import data using closure', function() {
+    $driver = \Micronotes\Flux\DriverFactory::make('foo-driver');
+
+    $fluxImport = new \Micronotes\Flux\FluxImport(
+        (new Foo())->getMorphClass(),
+        $driver,
+        filters: [],
+        dryRun: false,
+        importUsing: function(\Micronotes\Flux\Concerns\Contracts\RowConverter $converter) {
+            \event(new \Micronotes\Flux\Tests\Fixture\Events\FakeImportEvent($converter));
+        }
+    );
+
+    Event::fake([
+        \Micronotes\Flux\Events\Importing::class,
+        \Micronotes\Flux\Tests\Fixture\Events\FakeImportEvent::class, 
+    ]);
+
+    \Micronotes\Flux\Facades\Flux::import($fluxImport);
+    
+    $this->assertNotSame(0, $count = count($fluxImport->retrievedConverters));
+
+    Event::assertDispatchedTimes(
+        \Micronotes\Flux\Events\Importing::class,
+        $count
+    );
+    Event::assertDispatchedTimes(
+        \Micronotes\Flux\Tests\Fixture\Events\FakeImportEvent::class,
+        $count
+    );
+    Event::assertDispatchedTimes(
+        \Micronotes\Flux\Events\ImportFailed::class,
+        0
+    );
+    expect($fluxImport)
+        ->status->toEqual(\Micronotes\Flux\Enums\FluxStatus::success)
+        ->and($fluxImport)->failed->toHaveCount(0);
+});

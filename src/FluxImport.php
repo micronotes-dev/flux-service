@@ -27,6 +27,7 @@ class FluxImport
         // todo define authorized map string| filters for driver|converters
         public readonly ?array $filters = null,
         public readonly bool $dryRun = false,
+        public readonly ?\Closure $importUsing = null,
     ) {
     }
 }

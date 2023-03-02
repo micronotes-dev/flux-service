@@ -3,6 +3,7 @@
 namespace Micronotes\Flux;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pipeline\Pipeline;
 use Micronotes\Flux\Concerns\AbstractFluxRepository;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
 use Micronotes\Flux\Concerns\Contracts\Upsertable;
@@ -35,7 +36,7 @@ class Flux
 
             match (true) {
                 ! empty($importCommand->failed) && ! empty($importCommand->imported) => $importCommand->status = FluxStatus::partial,
-                empty($importCommand->imported) => $importCommand->status = FluxStatus::failed,
+                empty($importCommand->imported) && !$importCommand->importUsing => $importCommand->status = FluxStatus::failed,
                 default => $importCommand->status = FluxStatus::success,
             };
         }
@@ -73,8 +74,22 @@ class Flux
 
     public function persistImport(FluxImport $importCommand): void
     {
-        // todo add $converter chunkable interface/trait
-        // chunk and dispatch a job
+        if ($importCommand->importUsing) {
+            foreach ($importCommand->retrievedConverters as $converter) {
+                try {
+                    event(new Importing($converter));
+                    ($importCommand->importUsing)($converter);
+                } catch (\Exception $exception) {
+                    $importCommand->failed[] = new FailedFluxMessage(
+                        reference: $converter->getReference(),
+                        message: $exception->getMessage(),
+                    );
+                    event(new ImportFailed($converter));
+                }
+            }
+
+            return;
+        }
 
         foreach ($importCommand->retrievedConverters as $converter) {
             try {
