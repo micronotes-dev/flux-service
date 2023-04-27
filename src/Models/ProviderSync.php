@@ -10,6 +10,8 @@ use Micronotes\Flux\Events\ProviderSyncCreating;
 
 class ProviderSync extends Model
 {
+    protected $table = 'provider_syncs';
+
     protected $fillable = [
         'model_type',
         'model_id',

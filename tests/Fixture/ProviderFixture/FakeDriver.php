@@ -11,9 +11,12 @@ use Micronotes\Flux\Tests\Fixture\ProviderFixture\FakeRowDataConverters\FooConve
 
 class FakeDriver implements FluxDriver
 {
-    public function getRepository(): AbstractFluxRepository
+    public function getRepository(?RowConverter $converter = null): AbstractFluxRepository
     {
-        return app(FakeRepository::class);
+        return match (true) {
+            $converter !== null && method_exists($converter, 'getRepository') => $converter->getRepository(),
+            default => app(FakeRepository::class)
+        };
     }
 
     public function getProvider(): string
@@ -52,5 +55,10 @@ class FakeDriver implements FluxDriver
         $reversedConverters = array_flip($this->getConverters());
 
         return $reversedConverters[$converter] ?? null;
+    }
+
+    public static function name(): string
+    {
+        return 'Fake Driver';
     }
 }
