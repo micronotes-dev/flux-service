@@ -3,7 +3,6 @@
 namespace Micronotes\Flux\DataTransferObjects;
 
 use Illuminate\Support\Str;
-use JetBrains\PhpStorm\Internal\TentativeType;
 use JsonSerializable;
 
 class Reference implements JsonSerializable, \Stringable

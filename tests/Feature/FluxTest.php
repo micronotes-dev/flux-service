@@ -26,7 +26,7 @@ it('can export data from driver', function (bool $batch) {
     $this->assertNotSame(0, $count = count($fluxExport->exported));
     $this->assertSame(count($fluxExport->converters), $count);
 
-    if (!$batch) {
+    if (! $batch) {
         Event::assertDispatchedTimes(
             \Micronotes\Flux\Events\Exporting::class,
             $count
@@ -42,8 +42,8 @@ it('can export data from driver', function (bool $batch) {
         ->getStatus()->toEqual(\Micronotes\Flux\Enums\FluxStatus::success)
         ->and($fluxExport)->exported->toHaveCount($count);
 })->with([
-    'batch:true' => ['batch' => true,],
-    'batch:false' => ['batch' => false,],
+    'batch:true' => ['batch' => true],
+    'batch:false' => ['batch' => false],
 ]);
 
 it('can import data from driver', function () {
@@ -83,7 +83,7 @@ it('can import data from driver', function () {
         ->and($fluxImport)->imported->toHaveCount($count);
 });
 
-it('can import data using closure', function() {
+it('can import data using closure', function () {
     $driver = \Micronotes\Flux\DriverFactory::make('foo-driver');
 
     $fluxImport = new \Micronotes\Flux\FluxImport(
@@ -91,18 +91,18 @@ it('can import data using closure', function() {
         $driver,
         filters: [],
         dryRun: false,
-        importUsing: function(\Micronotes\Flux\Concerns\Contracts\RowConverter $converter) {
+        importUsing: function (Micronotes\Flux\Concerns\Contracts\RowConverter $converter) {
             \event(new \Micronotes\Flux\Tests\Fixture\Events\FakeImportEvent($converter));
         }
     );
 
     Event::fake([
         \Micronotes\Flux\Events\Importing::class,
-        \Micronotes\Flux\Tests\Fixture\Events\FakeImportEvent::class, 
+        \Micronotes\Flux\Tests\Fixture\Events\FakeImportEvent::class,
     ]);
 
     \Micronotes\Flux\Facades\Flux::import($fluxImport);
-    
+
     $this->assertNotSame(0, $count = count($fluxImport->retrievedConverters));
 
     Event::assertDispatchedTimes(

@@ -2,7 +2,6 @@
 
 namespace Micronotes\Flux\Tests\Fixture\ProviderFixture;
 
-use Illuminate\Support\Arr;
 use Micronotes\Flux\Concerns\AbstractFluxRepository;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
 use Micronotes\Flux\DataTransferObjects\Reference;

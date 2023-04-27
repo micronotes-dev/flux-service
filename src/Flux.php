@@ -2,11 +2,8 @@
 
 namespace Micronotes\Flux;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Pipeline\Pipeline;
 use Micronotes\Flux\Concerns\AbstractFluxRepository;
 use Micronotes\Flux\Concerns\Contracts\RowConverter;
-use Micronotes\Flux\Concerns\Contracts\Upsertable;
 use Micronotes\Flux\DataTransferObjects\FailedFluxMessage;
 use Micronotes\Flux\Enums\FluxStatus;
 use Micronotes\Flux\Events\Batched;
@@ -36,7 +33,7 @@ class Flux
 
             match (true) {
                 ! empty($importCommand->failed) && ! empty($importCommand->imported) => $importCommand->status = FluxStatus::partial,
-                empty($importCommand->imported) && !$importCommand->importUsing => $importCommand->status = FluxStatus::failed,
+                empty($importCommand->imported) && ! $importCommand->importUsing => $importCommand->status = FluxStatus::failed,
                 default => $importCommand->status = FluxStatus::success,
             };
         }
